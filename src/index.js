@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import DemoProps from "./Props/DemoProps";
-import ListPhone from "./Props/ListPhone/ListPhone";
+import App from "./App";
+// import DemoProps from "./Props/DemoProps";
+// import ListPhone from "./Props/ListPhone/ListPhone";
 // import Header from "./Components/Header";
 // import Footer from "./Components/Footer";
 // import Home from "./Components/Home";
@@ -41,6 +42,7 @@ root.render(
     {/* <RenderWithMap/> */}
     {/* <ExCar/> */}
     {/* <DemoProps/> */}
-    <ListPhone />
+    {/* <ListPhone /> */}
+    <App />
   </>
 );
