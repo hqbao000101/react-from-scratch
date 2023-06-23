@@ -5,9 +5,9 @@ export default class Home extends Component {
   render() {
     return (
       <div>
-        <nav className="navbar navbar-expand-sm navbar-dark bg-primary">
+        <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
           <div className="container">
-            <NavLink className="navbar-brand" to="/home">
+            <NavLink className="navbar-brand" to="">
               Navbar
             </NavLink>
             <button
@@ -29,7 +29,7 @@ export default class Home extends Component {
                     className="btn btn-danger text-white"
                     onClick={() => {
                       // * thẻ Navigate giúp chuyển hướng người dùng tới các path theo mong muốn
-                      <Navigate to="/home" />;
+                      <Navigate to="/" />;
                     }}
                   >
                     Go Home
@@ -40,17 +40,23 @@ export default class Home extends Component {
                   Detail
                 </a> */}
                   {/* thuộc tính to giúp chuyển hướng tới các component được định nghĩa trong route mà không bị reload lại trang */}
-                  <NavLink className="nav-link" to="/home/detail">
+                  <NavLink
+                    className="nav-link"
+                    to="/detail"
+                    style={({ isActive }) =>
+                      isActive ? { color: "white", backgroundColor: "red" } : {}
+                    }
+                  >
                     Detail
                   </NavLink>
                 </li>
-                <li>
+                <li className="nav-item">
                   <NavLink
                     // className={({ isActive }) =>
                     //   isActive ? "nav-link bg-danger text-white" : "nav-link"
                     // }
+                    to="/login"
                     className="nav-link"
-                    to="/home/login"
                     style={({ isActive }) =>
                       isActive ? { color: "white", backgroundColor: "red" } : {}
                     }
@@ -58,25 +64,16 @@ export default class Home extends Component {
                     Login
                   </NavLink>
                 </li>
-                <li className="nav-item dropdown">
-                  <a
-                    className="nav-link dropdown-toggle"
-                    href="/home"
-                    id="dropdownId"
-                    data-bs-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
+                <li className="nav-item">
+                  <NavLink
+                    to="/form"
+                    className="nav-link"
+                    style={({ isActive }) =>
+                      isActive ? { color: "white", backgroundColor: "red" } : {}
+                    }
                   >
-                    Dropdown
-                  </a>
-                  <div className="dropdown-menu" aria-labelledby="dropdownId">
-                    <a className="dropdown-item" href="/home">
-                      Action 1
-                    </a>
-                    <a className="dropdown-item" href="/home">
-                      Action 2
-                    </a>
-                  </div>
+                    React Form
+                  </NavLink>
                 </li>
               </ul>
               <form className="d-flex my-2 my-lg-0">

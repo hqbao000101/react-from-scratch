@@ -9,6 +9,8 @@ import SideBar from "./Templates/SideBar";
 import Admin from "./Templates/Admin";
 import Page404 from "./Pages/Page404";
 import Dashboard from "./Pages/Dashboard";
+import ItemDetail from "./Pages/ItemDetail";
+import ProductList from "./Pages/DemoForm/ProductList";
 
 export default function App() {
   return (
@@ -21,12 +23,13 @@ export default function App() {
         {/* <Route path="/home" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/detail" element={<Detail />} /> */}
-        <Route path="/home" element={<Home />}>
+        <Route path="" element={<Home />}>
           <Route index element={<SideBar />} />
-          <Route path="detail" element={<Detail />}>
-            <Route path=":id" element={<Detail />} />
-          </Route>
           <Route path="login" element={<Login />} />
+          <Route path="detail" element={<Detail />}>
+            <Route path=":id" element={<ItemDetail />} />
+          </Route>
+          <Route path="form" element={<ProductList />} />
           {/* Sử dụng path="*" giúp chuyển hướng người dùng đến trang not found hoặc trang nào đó do mình định nghĩa khi route không tồn tại */}
           {/* <Route path="page-not-found" element={<Page404 />} /> */}
           <Route path="*" element={<Page404 />} />
