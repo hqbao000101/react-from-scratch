@@ -21,20 +21,8 @@ export default class FormProduct extends Component {
     activeButton: true,
   };
 
-  getValueInput = (event) => {
-    let { value, id } = event.target;
-    // this.setState({
-    //   [id]: value,
-    // });
-    let newValues = this.state.values;
-    newValues[id] = value;
-
-    // ! validation: check rỗng, check ký tự và check số
-    // todo: check rỗng
-    let newError = this.state.errors;
-    // todo: lấy data-attribute được tạo ra dùng event.target.getAttribute
-    let type = event.target.getAttribute("data-type");
-
+  // ! check empty inputs - regex
+  checkValidation = (id, newValues, newError, type) => {
     if (newValues[id] === "") {
       newError[id] = `${id} không được để rỗng`;
     } else {
@@ -61,7 +49,7 @@ export default class FormProduct extends Component {
           break;
         case "letter":
           {
-            let regexLetter = /^[a-zA-Z]+$/;
+            let regexLetter = /^[a-zA-Z\s]+$/;
             let result = regexLetter.test(newValues[id]);
             // if (!result) {
             //   newError[id] = `${id} must contain only characters`;
@@ -73,24 +61,67 @@ export default class FormProduct extends Component {
           break;
       }
     }
+  };
 
-    // ! active button
-    if (newError[id] === "") {
-      this.setState({
-        activeButton: false,
-      });
+  // ! check active button
+  checkActiveBtn = () => {
+    let valid = false;
+    // dung vong lap
+    for (let item in this.state.errors) {
+      // * ở đây check nếu thuộc tính trong error mà có chuỗi hoặc các input chưa có dữ liệu thì sẽ set valid thành true
+      if (this.state.errors[item] !== "" || this.state.values[item] === "") {
+        valid = true;
+      }
     }
+    return valid;
+  };
+
+  // ! get user inputs
+  getValueInput = (event) => {
+    let { value, id } = event.target;
+    // this.setState({
+    //   [id]: value,
+    // });
+    let newValues = this.state.values;
+    newValues[id] = value;
+
+    // ! validation: check rỗng, check ký tự và check số
+    // todo: check rỗng
+    let newError = this.state.errors;
+    // todo: lấy data-attribute được tạo ra dùng event.target.getAttribute
+    let type = event.target.getAttribute("data-type");
+
+    this.checkValidation(id, newValues, newError, type);
+
+    // ! check nguoi dung da fill het du lieu vao input
+    // ! check validation: check nguoi dung khong bi loi, cu the cac thuoc tinh trong error cua state se la chuoi rong
+    let valid = this.checkActiveBtn();
 
     this.setState({
       values: newValues,
       errors: newError,
+      activeButton: valid,
     });
   };
 
   handleSubmit = (event) => {
     // ! run a method to prevent the browser to reload the page
     event.preventDefault();
-    console.log(this.state);
+    // ! ở đây dùng phương thức thêm sản phẩm được truyền từ props để giúp arrProduct trên component product list có thể lấy được sản phẩm
+    let newArr = { ...this.state.values };
+    this.props.themSanPham(newArr);
+    // ! xoa form
+    this.setState({
+      ...this.state,
+      values: {
+        id: "",
+        image: "",
+        name: "",
+        price: "",
+        descrip: "",
+        type: "",
+      },
+    });
   };
 
   render() {
@@ -120,6 +151,7 @@ export default class FormProduct extends Component {
                   //   })
                   // }}
                   onChange={this.getValueInput}
+                  value={this.state.values.id}
                 />
                 <p className="text-danger fst-italic">{id}</p>
               </div>
@@ -132,6 +164,7 @@ export default class FormProduct extends Component {
                   type="text"
                   id="image"
                   onChange={this.getValueInput}
+                  value={this.state.values.image}
                 />
                 <p className="text-danger fst-italic">{image}</p>
               </div>
@@ -145,6 +178,7 @@ export default class FormProduct extends Component {
                   id="name"
                   onChange={this.getValueInput}
                   data-type="letter"
+                  value={this.state.values.name}
                 />
                 <p className="text-danger fst-italic">{name}</p>
               </div>
@@ -157,6 +191,7 @@ export default class FormProduct extends Component {
                   type="text"
                   id="type"
                   onChange={this.getValueInput}
+                  value={this.state.values.type}
                 />
                 <p className="text-danger fst-italic">{type}</p>
               </div>
@@ -170,6 +205,7 @@ export default class FormProduct extends Component {
                   id="price"
                   onChange={this.getValueInput}
                   data-type="number"
+                  value={this.state.values.price}
                 />
                 <p className="text-danger fst-italic">{price}</p>
               </div>
@@ -182,6 +218,7 @@ export default class FormProduct extends Component {
                   type="text"
                   id="descrip"
                   onChange={this.getValueInput}
+                  value={this.state.values.descrip}
                 />
                 <p className="text-danger fst-italic">{descrip}</p>
               </div>
@@ -195,7 +232,14 @@ export default class FormProduct extends Component {
             >
               Tạo sản phẩm
             </button>
-            <button type="submit" className="btn btn-warning text-white">
+            <button
+              type="button"
+              className="btn btn-warning text-white"
+              onClick={() => {
+                let sanPham = { ...this.state.values };
+                this.props.capNhatSanPham(sanPham);
+              }}
+            >
               Cập nhật
             </button>
           </div>
